@@ -54,10 +54,18 @@ COLUNAS_NUMERICAS = [
 ]
 
 # Vento tem cerca de 66% de nulos no periodo e por isso nao entra nas features.
+# Os extremos horarios (15 nulos = 0,09%) sao interpolados apenas para permitir
+# o calculo de amplitudes intra-horarias sem NaNs.
 COLUNAS_INTERPOLADAS = [
     "pressao_mb",
+    "pressao_max_mb",
+    "pressao_min_mb",
     "temp_c",
     "temp_orvalho_c",
+    "temp_max_c",
+    "temp_min_c",
+    "orvalho_max_c",
+    "orvalho_min_c",
     "umid_pct",
     "umid_max_pct",
     "umid_min_pct",

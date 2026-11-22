@@ -7,12 +7,20 @@ funcionem tanto a partir da pasta do modulo quanto da raiz do repositorio.
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
-REPO_ROOT = BASE_DIR.parents[2]
+REPO_ROOT = BASE_DIR.parent if (BASE_DIR.parent / "dados").exists() else BASE_DIR.parents[2]
 
 DATA_DIR = REPO_ROOT / "dados" / "clima"
-RAW_CSV = DATA_DIR / "recife_inmet_2019_2020.csv"
+_DEFAULT_CLIMA_CSV = DATA_DIR / "recife_inmet_2019_2020.csv"
+RAW_CSV = (
+    _DEFAULT_CLIMA_CSV
+    if _DEFAULT_CLIMA_CSV.exists()
+    else (REPO_ROOT / "dados" / "df_recife.csv")
+)
 OPEN_METEO_CSV = DATA_DIR / "open_meteo_recife_2019_2020.csv"
 LIVE_CSV = DATA_DIR / "observacoes_inmet_a301.csv"
+WORKING_FEATURES_CSV = REPO_ROOT / "dados" / "df_recife_features.csv"
+CLUSTER_FEATURES_CSV = REPO_ROOT / "dados" / "df_recife_cluster_features.csv"
+TARGETS_CSV = REPO_ROOT / "dados" / "df_recife_alvos.csv"
 
 PIPELINE_DATA_DIR = REPO_ROOT / "src" / "backend" / "pipeline" / "data"
 SCORE_BAIRRO_CSV = PIPELINE_DATA_DIR / "score_bairro.csv"
