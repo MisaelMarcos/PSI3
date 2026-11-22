@@ -1,0 +1,248 @@
+{
+  "gerado_em": "2026-11-22T00:42:52.366128+00:00",
+  "csv_bruto": "dados/df_recife.csv",
+  "n_registros": 17544,
+  "features_candidatas_count": 29,
+  "features_candidatas": [
+    "hora_sin",
+    "hora_cos",
+    "mes_sin",
+    "mes_cos",
+    "estacao_chuvosa",
+    "orvalho_depressao",
+    "amp_temp_1h",
+    "amp_pressao_1h",
+    "amp_umid_1h",
+    "pressao_delta_1h",
+    "pressao_delta_3h",
+    "pressao_delta_6h",
+    "temp_delta_1h",
+    "temp_delta_3h",
+    "orvalho_delta_3h",
+    "umid_delta_1h",
+    "umid_delta_3h",
+    "chuva_1h",
+    "chuva_3h",
+    "chuva_6h",
+    "chuva_12h",
+    "chuva_24h",
+    "chuva_max_3h",
+    "chuva_max_6h",
+    "chuva_lag_1h",
+    "chuva_lag_3h",
+    "chuva_lag_6h",
+    "chuva_lag_12h",
+    "chuva_lag_24h"
+  ],
+  "features_clustering": [
+    "pressao_mb",
+    "temp_c",
+    "temp_orvalho_c",
+    "umid_pct",
+    "hora_sin",
+    "hora_cos",
+    "mes_sin",
+    "mes_cos"
+  ],
+  "features_classificacao": [
+    "chuva_1h",
+    "chuva_3h",
+    "chuva_6h",
+    "chuva_12h",
+    "chuva_24h",
+    "chuva_max_3h",
+    "chuva_max_6h",
+    "chuva_lag_1h",
+    "chuva_lag_3h",
+    "chuva_lag_6h",
+    "chuva_lag_12h",
+    "chuva_lag_24h",
+    "pressao_mb",
+    "pressao_delta_1h",
+    "pressao_delta_3h",
+    "pressao_delta_6h",
+    "amp_pressao_1h",
+    "temp_c",
+    "temp_orvalho_c",
+    "orvalho_depressao",
+    "temp_delta_1h",
+    "temp_delta_3h",
+    "orvalho_delta_3h",
+    "amp_temp_1h",
+    "umid_pct",
+    "umid_delta_1h",
+    "umid_delta_3h",
+    "amp_umid_1h",
+    "hora_sin",
+    "hora_cos",
+    "mes_sin",
+    "mes_cos",
+    "estacao_chuvosa"
+  ],
+  "colunas_identificadoras": [
+    "datetime",
+    "datetime_utc",
+    "datetime_local",
+    "ano",
+    "mes",
+    "dia",
+    "hora"
+  ],
+  "colunas_excluidas_redundancia_bruta": [
+    "pressao_max_mb",
+    "pressao_min_mb",
+    "temp_max_c",
+    "temp_min_c",
+    "orvalho_max_c",
+    "orvalho_min_c",
+    "umid_max_pct",
+    "umid_min_pct"
+  ],
+  "colunas_excluidas_excesso_nulos": [
+    "vento_dir_gr",
+    "vento_rajada_ms",
+    "vento_vel_ms"
+  ],
+  "colunas_alvo": [
+    "alvo_2h_5mm",
+    "alvo_2h_10mm",
+    "alvo_3h_5mm",
+    "alvo_3h_10mm",
+    "alvo_2h_acum_10mm",
+    "alvo_2h_acum_20mm",
+    "alvo_3h_acum_10mm",
+    "alvo_3h_acum_20mm"
+  ],
+  "colunas_agregadas_futuras": [
+    "max_fut_2h",
+    "max_fut_3h",
+    "acum_fut_2h",
+    "acum_fut_3h"
+  ],
+  "alvos_resumo": {
+    "2h_5mm": {
+      "horizonte_h": 2,
+      "limiar_mm": 5,
+      "linhas_validas": 17542,
+      "positivos": 292,
+      "prevalencia": 0.01664576445103181,
+      "positivos_2019": 162,
+      "positivos_2020": 130
+    },
+    "2h_10mm": {
+      "horizonte_h": 2,
+      "limiar_mm": 10,
+      "linhas_validas": 17542,
+      "positivos": 98,
+      "prevalencia": 0.00558659217877095,
+      "positivos_2019": 56,
+      "positivos_2020": 42
+    },
+    "3h_5mm": {
+      "horizonte_h": 3,
+      "limiar_mm": 5,
+      "linhas_validas": 17541,
+      "positivos": 406,
+      "prevalencia": 0.023145772760960037,
+      "positivos_2019": 224,
+      "positivos_2020": 182
+    },
+    "3h_10mm": {
+      "horizonte_h": 3,
+      "limiar_mm": 10,
+      "linhas_validas": 17541,
+      "positivos": 142,
+      "prevalencia": 0.008095319537084545,
+      "positivos_2019": 80,
+      "positivos_2020": 62
+    },
+    "2h_acum_10mm": {
+      "horizonte_h": 2,
+      "limiar_mm": 10,
+      "linhas_validas": 17542,
+      "positivos": 135,
+      "prevalencia": 0.007695815756470186,
+      "positivos_2019": 75,
+      "positivos_2020": 60
+    },
+    "3h_acum_10mm": {
+      "horizonte_h": 3,
+      "limiar_mm": 10,
+      "linhas_validas": 17541,
+      "positivos": 237,
+      "prevalencia": 0.013511202325979134,
+      "positivos_2019": 133,
+      "positivos_2020": 104
+    },
+    "3h_acum_20mm": {
+      "horizonte_h": 3,
+      "limiar_mm": 20,
+      "linhas_validas": 17541,
+      "positivos": 72,
+      "prevalencia": 0.004104669061056952,
+      "positivos_2019": 38,
+      "positivos_2020": 34
+    }
+  },
+  "n_pares_redundantes_abs_r_070": 51,
+  "perfil_clusters": {
+    "0": {
+      "horas": 5945,
+      "pressao_media": 1011.994,
+      "temp_media": 29.142,
+      "orvalho_medio": 21.273,
+      "umidade_media": 62.98,
+      "pct_horas_chuva": 1.85,
+      "chuva_acumulada_mm": 64.6
+    },
+    "1": {
+      "horas": 6076,
+      "pressao_media": 1011.742,
+      "temp_media": 25.416,
+      "orvalho_medio": 22.572,
+      "umidade_media": 84.626,
+      "pct_horas_chuva": 15.372,
+      "chuva_acumulada_mm": 1817.0
+    },
+    "2": {
+      "horas": 5523,
+      "pressao_media": 1014.718,
+      "temp_media": 23.706,
+      "orvalho_medio": 20.648,
+      "umidade_media": 83.53,
+      "pct_horas_chuva": 21.709,
+      "chuva_acumulada_mm": 1856.8
+    }
+  },
+  "shapes": {
+    "working_features": [
+      17544,
+      40
+    ],
+    "cluster_features": [
+      17544,
+      10
+    ],
+    "targets": [
+      17544,
+      17
+    ],
+    "X_clustering": [
+      17544,
+      8
+    ],
+    "X_classificacao": [
+      17544,
+      33
+    ]
+  },
+  "arquivos_gerados": {
+    "working_features_csv": "dados/df_recife_features.csv",
+    "cluster_features_csv": "dados/df_recife_cluster_features.csv",
+    "targets_csv": "dados/df_recife_alvos.csv",
+    "correlacoes_csv": "ml/outputs/correlacoes_features.csv",
+    "relevancia_csv": "ml/outputs/relevancia_features.csv",
+    "redundancia_csv": "ml/outputs/redundancia_pares.csv",
+    "auditoria_md": "ml/outputs/auditoria_features.md"
+  }
+}
