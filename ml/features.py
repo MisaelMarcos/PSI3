@@ -54,7 +54,7 @@ COLUNAS_EXCLUIDAS_REDUNDANCIA_BRUTA = [
     "umid_min_pct",
 ]
 
-# Vento tem ~66% de valores ausentes em 2019-2020 na estacao A301.
+# Variaveis de vento sao excluidas por terem muitos valores ausentes.
 COLUNAS_EXCLUIDAS_EXCESSO_NULOS = [
     "vento_dir_gr",
     "vento_rajada_ms",
@@ -131,7 +131,7 @@ FEATURES_CANDIDATAS = [
 
 # Subconjunto usado na clusterizacao nao-supervisionada (K-Means).
 # Alinhado a Notebooks/kmeans_recife.ipynb: exclui chuva observada (evita viciar
-# grupos pelo fenomeno-alvo), exclui orvalho_depressao (|r| = 0,9957 com
+# grupos pelo fenomeno-alvo), exclui orvalho_depressao (|r| proximo de 1 com
 # umid_pct) e exclui deltas/amplitudes para manter espaco euclidiano enxuto e
 # equilibrado entre estado termodinamico e ciclos temporais.
 FEATURES_CLUSTERING = [
@@ -506,8 +506,8 @@ def _justificativa_feature(nome: str) -> str:
         )
     if nome == "orvalho_depressao":
         return (
-            "Exclusiva de classificacao: r = -0,9957 com umid_pct (duplicaria "
-            "peso na distancia euclidiana do K-Means), mas util em arvores."
+            "Exclusiva de classificacao: correlacao quase perfeita com umid_pct "
+            "quase duplicaria o peso da umidade no K-Means, mas e util em arvores."
         )
     if nome == "estacao_chuvosa":
         return (

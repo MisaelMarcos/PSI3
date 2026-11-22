@@ -9,8 +9,8 @@ import pandas as pd
 
 from config import LIVE_CSV, OPEN_METEO_CSV, RAW_CSV, TIMEZONE
 
-# O arquivo original tem 20 colunas, mas os nomes vem com acentos quebrados
-# pelo encoding latin1. A renomeacao por posicao e mais segura.
+# O CSV bruto antigo tem 20 colunas com cabecalhos inconsistentes; renomear por
+# posicao preserva compatibilidade com ele e com o esquema consolidado de 18.
 COLUNAS_ORIGINAIS = [
     "indice",
     "data",
@@ -34,6 +34,27 @@ COLUNAS_ORIGINAIS = [
     "datetime",
 ]
 
+COLUNAS_ORIGINAIS_DATETIME = [
+    "datetime",
+    "precip_mm",
+    "pressao_mb",
+    "pressao_max_mb",
+    "pressao_min_mb",
+    "temp_c",
+    "temp_orvalho_c",
+    "temp_max_c",
+    "temp_min_c",
+    "orvalho_max_c",
+    "orvalho_min_c",
+    "umid_max_pct",
+    "umid_min_pct",
+    "umid_pct",
+    "vento_dir_gr",
+    "vento_rajada_ms",
+    "vento_vel_ms",
+    "estacao",
+]
+
 COLUNAS_NUMERICAS = [
     "precip_mm",
     "pressao_mb",
@@ -53,9 +74,9 @@ COLUNAS_NUMERICAS = [
     "vento_vel_ms",
 ]
 
-# Vento tem cerca de 66% de nulos no periodo e por isso nao entra nas features.
-# Os extremos horarios (15 nulos = 0,09%) sao interpolados apenas para permitir
-# o calculo de amplitudes intra-horarias sem NaNs.
+# Variaveis de vento nao entram nas features por terem muitos valores ausentes.
+# Os extremos horarios sao interpolados para permitir o calculo de amplitudes
+# intra-horarias sem NaNs.
 COLUNAS_INTERPOLADAS = [
     "pressao_mb",
     "pressao_max_mb",
@@ -118,8 +139,8 @@ def _converter_numero(serie: pd.Series) -> pd.Series:
 def ler_csv(caminho: str | Path = RAW_CSV) -> pd.DataFrame:
     """Le o CSV do INMET e devolve uma base horaria tratada.
 
-    - O CSV original esta em latin1.
-    - A coluna ``datetime`` ja vem em UTC.
+    - Aceita os esquemas bruto do INMET e ``df_recife_datetime.csv``.
+    - A coluna ``datetime`` ja vem em UTC nos dois esquemas.
     - Valores fisicos sao interpolados apenas para features; a precipitacao
       original e preservada em ``precip_mm`` e a versao usada nos calculos
       fica em ``precip_mm_limpa`` (nulos viram 0).
@@ -128,16 +149,21 @@ def ler_csv(caminho: str | Path = RAW_CSV) -> pd.DataFrame:
     if not caminho.exists():
         raise FileNotFoundError(
             f"CSV nao encontrado: {caminho}. "
-            "Coloque o arquivo em dados/clima/recife_inmet_2019_2020.csv."
+            "Confira RAW_CSV em ml/config.py."
         )
 
     df = pd.read_csv(caminho, encoding="latin1", dtype=str)
-    if len(df.columns) != len(COLUNAS_ORIGINAIS):
+    if len(df.columns) == len(COLUNAS_ORIGINAIS):
+        df.columns = COLUNAS_ORIGINAIS
+    elif len(df.columns) == len(COLUNAS_ORIGINAIS_DATETIME):
+        df.columns = COLUNAS_ORIGINAIS_DATETIME
+    else:
         raise ValueError(
-            f"Esperava {len(COLUNAS_ORIGINAIS)} colunas no CSV, "
+            "Esperava um CSV com "
+            f"{len(COLUNAS_ORIGINAIS)} (bruto) ou "
+            f"{len(COLUNAS_ORIGINAIS_DATETIME)} (datetime) colunas, "
             f"recebi {len(df.columns)}."
         )
-    df.columns = COLUNAS_ORIGINAIS
 
     df["datetime"] = pd.to_datetime(df["datetime"], errors="coerce", utc=True)
     df = df.dropna(subset=["datetime"]).copy()
@@ -173,7 +199,7 @@ def ler_csv(caminho: str | Path = RAW_CSV) -> pd.DataFrame:
     df["hora"] = df["datetime_local"].dt.hour
 
     # Remove colunas auxiliares que nao agregam ao modelo.
-    df = df.drop(columns=["indice", "data", "hora_utc"], errors="ignore")
+    df = df.drop(columns=["indice", "data", "hora_utc", "estacao"], errors="ignore")
     return df.reset_index(drop=True)
 
 

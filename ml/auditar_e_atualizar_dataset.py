@@ -51,8 +51,8 @@ def _classificar_decisao_redundancia(a: str, b: str) -> str:
         )
     if par == {"umid_pct", "orvalho_depressao"}:
         return (
-            "orvalho_depressao excluida do clustering (|r|=0,9957 evitaria "
-            "dupla contagem euclidiana) e mantida apenas na classificacao."
+            "orvalho_depressao excluida do clustering por correlacao quase "
+            "perfeita com umid_pct; evita dupla contagem euclidiana."
         )
     if par.intersection({"hora", "mes"}):
         return (
@@ -129,7 +129,7 @@ def gerar_relatorio_markdown(
         f"- **Variaveis de entrada em Clustering (K-Means)**: {len(FEATURES_CLUSTERING)} -> `{FEATURES_CLUSTERING}`.",
         f"- **Variaveis de entrada em Classificacao**: {len(FEATURES_CLASSIFICACAO)} (4 fisicas originais + {len(FEATURES_CANDIDATAS)} candidatas).",
         f"- **Colunas excluidas por redundancia bruta**: `{COLUNAS_EXCLUIDAS_REDUNDANCIA_BRUTA}`.",
-        f"- **Colunas excluidas por excesso de nulos (~66%)**: `{COLUNAS_EXCLUIDAS_EXCESSO_NULOS}`.",
+        f"- **Colunas excluidas por excesso de nulos**: `{COLUNAS_EXCLUIDAS_EXCESSO_NULOS}`.",
         "",
         "## 2. Features Candidatas Consolidadas (todas estritamente <= t)",
         "",
@@ -153,7 +153,7 @@ def gerar_relatorio_markdown(
         _formatar_tabela_md(top_red),
         "",
         "### Resumo da separacao Clustering vs. Classificacao",
-        "- **Clustering (K-Means, k=3, StandardScaler)**: utiliza apenas as **8 features** de estado atmosferico instantaneo e ciclos (`pressao_mb`, `temp_c`, `temp_orvalho_c`, `umid_pct`, `hora_sin`, `hora_cos`, `mes_sin`, `mes_cos`). Exclui toda variavel de chuva (evita viciar os grupos pelo alvo), exclui `orvalho_depressao` (`r = -0,9957` com `umid_pct`, evitando dupla contagem na distancia euclidiana) e exclui deltas/amplitudes redundantes.",
+        "- **Clustering (K-Means, k=3, StandardScaler)**: utiliza apenas as **8 features** de estado atmosferico instantaneo e ciclos (`pressao_mb`, `temp_c`, `temp_orvalho_c`, `umid_pct`, `hora_sin`, `hora_cos`, `mes_sin`, `mes_cos`). Exclui toda variavel de chuva (evita viciar os grupos pelo alvo), exclui `orvalho_depressao` (quase perfeitamente correlacionada com `umid_pct`, evitando dupla contagem na distancia euclidiana) e exclui deltas/amplitudes redundantes.",
         "- **Classificacao Supervisionada (Random Forest)**: utiliza **33 features** (4 fisicas originais + 29 derivadas <= t), pois arvores de decisao sao invariantes a escala monotona e se beneficiam de sinais de persistencia (`chuva_*`), tendencia barometrica/termica (`*_delta_*`) e amplitude intra-horaria (`amp_*_1h`).",
         "",
         "### Perfil dos 3 Clusters Obtidos (Validacao Externa com Chuva)",
@@ -165,7 +165,7 @@ def gerar_relatorio_markdown(
         "1. **Leakage de Alvo no Clustering**: `precip_mm`, `precip_mm_limpa` e `chuva_*` sao proibidas em `FEATURES_CLUSTERING` (verificado por `validar_sem_leakage(..., modo='clustering')`).",
         "2. **Leakage Temporal Futuro na Classificacao**: `max_fut_2h`, `acum_fut_2h`, `max_fut_3h`, `acum_fut_3h` e todas as 8 colunas `alvo_*` usam `shift(-1..-3)` e estao estritamente fora de `X` (verificado por `validar_sem_leakage(..., modo='classificacao')`).",
         "3. **Leakage de Identificadores e Metadados Temporais**: `Unnamed: 0`, `Data`, `Hora UTC`, `datetime`, `datetime_utc`, `datetime_local`, `ano`, `mes`, `dia`, `hora` ficam isolados no bloco identificador `df_id`.",
-        "4. **Leakage de Treino/Teste e Hiperparametros**: importancias de RF, KMeans de comparacao e escolha de limiares usam apenas 2019 (com `TimeSeriesSplit(gap=3)` na validacao cruzada), mantendo 2020 como holdout cego.",
+        "4. **Separacao temporal da classificacao**: importancias de RF e escolha de limiares usam apenas 2019 (com `TimeSeriesSplit(gap=3)` na validacao cruzada), mantendo 2020 como holdout. A auditoria de clustering e os perfis descritivos usam a base completa.",
         "",
         "## 6. Datasets de Trabalho Atualizados",
         "",
@@ -175,7 +175,7 @@ def gerar_relatorio_markdown(
         "",
         "## 7. Checklist Final de Evidencias",
         "",
-        "- [x] **Item 1**: `ml/features.py` e notebooks de Recife auditados; alteracoes preexistentes preservadas e CSV bruto (`dados/df_recife.csv`) intacto.",
+        "- [x] **Item 1**: `ml/features.py` e notebooks de Recife auditados; CSV bruto (`dados/df_recife_datetime.csv`) preservado.",
         f"- [x] **Item 2**: {len(FEATURES_CANDIDATAS)} features candidatas consolidadas em `ml/features.py` (ciclos, sazonalidade, derivadas meteorologicas e lags/acumulados).",
         "- [x] **Item 3**: Correlacoes (Pearson/Spearman) e relevancia (RF 2019 + ANOVA F) registradas em `ml/outputs/correlacoes_features.csv` e `ml/outputs/relevancia_features.csv`.",
         f"- [x] **Item 4**: Redundancia ({len(red)} pares com |r| >= 0,70) documentada em `ml/outputs/redundancia_pares.csv` com justificativa clustering vs. classificacao.",
