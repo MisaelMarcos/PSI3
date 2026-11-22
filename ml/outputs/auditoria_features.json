@@ -1,5 +1,5 @@
 {
-  "gerado_em": "2026-11-22T01:34:12.822232+00:00",
+  "gerado_em": "2026-11-22T01:56:50.874139+00:00",
   "csv_bruto": "dados/df_recife_datetime.csv",
   "n_registros": 33371,
   "features_candidatas_count": 29,
@@ -123,63 +123,63 @@
     "2h_5mm": {
       "horizonte_h": 2,
       "limiar_mm": 5,
-      "linhas_validas": 33369,
+      "linhas_validas": 33211,
       "positivos": 579,
-      "prevalencia": 0.01735143396565675,
+      "prevalencia": 0.01743398271656981,
       "positivos_2019": 162,
       "positivos_2020": 130
     },
     "2h_10mm": {
       "horizonte_h": 2,
       "limiar_mm": 10,
-      "linhas_validas": 33369,
+      "linhas_validas": 33211,
       "positivos": 196,
-      "prevalencia": 0.005873715124816446,
+      "prevalencia": 0.005901659088856102,
       "positivos_2019": 56,
       "positivos_2020": 42
     },
     "3h_5mm": {
       "horizonte_h": 3,
       "limiar_mm": 5,
-      "linhas_validas": 33368,
-      "positivos": 801,
-      "prevalencia": 0.0240050347638456,
+      "linhas_validas": 33161,
+      "positivos": 799,
+      "prevalencia": 0.02409456892132324,
       "positivos_2019": 224,
       "positivos_2020": 182
     },
     "3h_10mm": {
       "horizonte_h": 3,
       "limiar_mm": 10,
-      "linhas_validas": 33368,
+      "linhas_validas": 33161,
       "positivos": 282,
-      "prevalencia": 0.008451210740829537,
+      "prevalencia": 0.008503965501643496,
       "positivos_2019": 80,
       "positivos_2020": 62
     },
     "2h_acum_10mm": {
       "horizonte_h": 2,
       "limiar_mm": 10,
-      "linhas_validas": 33369,
+      "linhas_validas": 33211,
       "positivos": 282,
-      "prevalencia": 0.008450957475501213,
+      "prevalencia": 0.008491162566619494,
       "positivos_2019": 75,
       "positivos_2020": 60
     },
     "3h_acum_10mm": {
       "horizonte_h": 3,
       "limiar_mm": 10,
-      "linhas_validas": 33368,
-      "positivos": 474,
-      "prevalencia": 0.014205226564373051,
+      "linhas_validas": 33161,
+      "positivos": 472,
+      "prevalencia": 0.014233587648140889,
       "positivos_2019": 133,
       "positivos_2020": 104
     },
     "3h_acum_20mm": {
       "horizonte_h": 3,
       "limiar_mm": 20,
-      "linhas_validas": 33368,
+      "linhas_validas": 33161,
       "positivos": 158,
-      "prevalencia": 0.004735075521457684,
+      "prevalencia": 0.004764633153403094,
       "positivos_2019": 38,
       "positivos_2020": 34
     }
@@ -187,37 +187,37 @@
   "n_pares_redundantes_abs_r_070": 52,
   "perfil_clusters": {
     "0": {
-      "horas": 11476,
-      "pressao_media": 1012.17,
-      "temp_media": 28.897,
-      "orvalho_medio": 21.189,
-      "umidade_media": 63.556,
-      "pct_horas_chuva": 2.309,
-      "chuva_acumulada_mm": 147.2
+      "horas": 11552,
+      "pressao_media": 1012.192,
+      "temp_media": 28.88,
+      "orvalho_medio": 21.183,
+      "umidade_media": 63.595,
+      "pct_horas_chuva": 2.32,
+      "chuva_acumulada_mm": 148.4
     },
     "1": {
       "horas": 11409,
-      "pressao_media": 1011.65,
-      "temp_media": 25.245,
-      "orvalho_medio": 22.465,
-      "umidade_media": 84.957,
-      "pct_horas_chuva": 17.723,
-      "chuva_acumulada_mm": 4188.0
+      "pressao_media": 1011.649,
+      "temp_media": 25.252,
+      "orvalho_medio": 22.462,
+      "umidade_media": 84.913,
+      "pct_horas_chuva": 17.661,
+      "chuva_acumulada_mm": 4180.0
     },
     "2": {
-      "horas": 10486,
-      "pressao_media": 1014.813,
-      "temp_media": 23.493,
-      "orvalho_medio": 20.829,
-      "umidade_media": 85.48,
-      "pct_horas_chuva": 21.352,
-      "chuva_acumulada_mm": 3171.4
+      "horas": 10410,
+      "pressao_media": 1014.808,
+      "temp_media": 23.463,
+      "orvalho_medio": 20.823,
+      "umidade_media": 85.663,
+      "pct_horas_chuva": 21.547,
+      "chuva_acumulada_mm": 3178.2
     }
   },
   "shapes": {
     "working_features": [
       33371,
-      40
+      36
     ],
     "cluster_features": [
       33371,

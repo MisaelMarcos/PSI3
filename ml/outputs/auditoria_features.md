@@ -1,6 +1,6 @@
 # Auditoria de Features, Redundancia, Risco de Leakage e Dataset de Trabalho (Recife - INMET A301)
 
-Gerado em: 2026-11-22T01:34:12.822232+00:00
+Gerado em: 2026-11-22T01:56:50.874139+00:00
 Base bruta (nao modificada): `dados/df_recife_datetime.csv` (33371 registros horarios)
 
 ## 1. Inventario do Pipeline Auditado
@@ -23,21 +23,21 @@ Base bruta (nao modificada): `dados/df_recife_datetime.csv` (33371 registros hor
 
 | feature | tipo | corr_precip_atual | corr_acum_fut_3h | corr_alvo_3h_acum_10mm | rf_imp_2019_acum_10mm | anova_f_clusters | entra_clustering | entra_classificacao |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| chuva_1h | Candidata derivada | 1.0000 | 0.3650 | 0.2721 | 0.0804 | 264.3700 | False | True |
-| chuva_6h | Candidata derivada | 0.5689 | 0.3573 | 0.2670 | 0.0741 | 395.1500 | False | True |
-| chuva_12h | Candidata derivada | 0.4247 | 0.3011 | 0.2313 | 0.0702 | 287.7800 | False | True |
-| chuva_24h | Candidata derivada | 0.3342 | 0.2794 | 0.2012 | 0.0606 | 414.4500 | False | True |
-| chuva_3h | Candidata derivada | 0.7229 | 0.3809 | 0.2844 | 0.0564 | 397.9100 | False | True |
-| chuva_max_3h | Candidata derivada | 0.7160 | 0.3470 | 0.2554 | 0.0464 | 433.1700 | False | True |
-| chuva_max_6h | Candidata derivada | 0.5556 | 0.3105 | 0.2255 | 0.0461 | 426.1200 | False | True |
-| temp_c | Original | -0.1341 | -0.1429 | -0.0693 | 0.0381 | 30067.2000 | True | True |
-| temp_orvalho_c | Original | 0.1104 | 0.1393 | 0.0926 | 0.0364 | 5325.6900 | True | True |
-| pressao_delta_3h | Candidata derivada | 0.0357 | 0.0418 | 0.0339 | 0.0348 | 1855.0800 | False | True |
-| pressao_delta_6h | Candidata derivada | 0.0453 | 0.0401 | 0.0295 | 0.0345 | 990.9100 | False | True |
-| orvalho_depressao | Candidata derivada | -0.1827 | -0.2053 | -0.1118 | 0.0340 | 32055.0900 | False | True |
-| chuva_lag_1h | Candidata derivada | 0.3904 | 0.2658 | 0.1969 | 0.0333 | 224.1100 | False | True |
-| umid_pct | Original | 0.1936 | 0.2150 | 0.1179 | 0.0316 | 30163.5000 | True | True |
-| pressao_mb | Original | 0.0402 | 0.0349 | -0.0020 | 0.0308 | 10470.1400 | True | True |
+| chuva_6h | Candidata derivada | 0.5691 | 0.3577 | 0.2681 | 0.0791 | 395.7600 | False | True |
+| chuva_1h | Candidata derivada | 1.0000 | 0.3649 | 0.2729 | 0.0742 | 266.1300 | False | True |
+| chuva_12h | Candidata derivada | 0.4252 | 0.3012 | 0.2322 | 0.0698 | 287.7900 | False | True |
+| chuva_3h | Candidata derivada | 0.7230 | 0.3810 | 0.2854 | 0.0616 | 397.9900 | False | True |
+| chuva_24h | Candidata derivada | 0.3342 | 0.2792 | 0.2017 | 0.0564 | 415.6100 | False | True |
+| chuva_max_3h | Candidata derivada | 0.7161 | 0.3470 | 0.2562 | 0.0467 | 432.7400 | False | True |
+| chuva_max_6h | Candidata derivada | 0.5559 | 0.3109 | 0.2266 | 0.0435 | 424.7700 | False | True |
+| temp_orvalho_c | Original | 0.1094 | 0.1387 | 0.0932 | 0.0394 | 5369.6900 | True | True |
+| temp_c | Original | -0.1341 | -0.1441 | -0.0700 | 0.0361 | 30302.2200 | True | True |
+| pressao_delta_3h | Candidata derivada | 0.0355 | 0.0404 | 0.0329 | 0.0353 | 1839.9100 | False | True |
+| umid_pct | Original | 0.1936 | 0.2159 | 0.1187 | 0.0346 | 30540.1700 | True | True |
+| pressao_delta_6h | Candidata derivada | 0.0444 | 0.0387 | 0.0285 | 0.0339 | 982.6900 | False | True |
+| chuva_lag_1h | Candidata derivada | 0.3903 | 0.2659 | 0.1977 | 0.0324 | 223.3000 | False | True |
+| pressao_mb | Original | 0.0402 | 0.0347 | -0.0025 | 0.0308 | 10268.4200 | True | True |
+| orvalho_depressao | Candidata derivada | -0.1825 | -0.2062 | -0.1129 | 0.0302 | 32566.8900 | False | True |
 
 Arquivo completo de correlacoes: `ml/outputs/correlacoes_features.csv`.
 Arquivo completo de relevancia: `ml/outputs/relevancia_features.csv`.
@@ -48,26 +48,26 @@ Foram identificados **52 pares** com |r| >= 0,70 (registrados em `ml/outputs/red
 
 | variavel_a | variavel_b | pearson_r | decisao_tecnica |
 | --- | --- | --- | --- |
-| umid_pct | orvalho_depressao | -0.9952 | orvalho_depressao excluida do clustering por correlacao quase perfeita com umid_pct; evita dupla contagem euclidiana. |
+| umid_pct | orvalho_depressao | -0.9949 | orvalho_depressao excluida do clustering por correlacao quase perfeita com umid_pct; evita dupla contagem euclidiana. |
 | pressao_max_mb | pressao_min_mb | 0.9947 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
 | pressao_mb | pressao_min_mb | 0.9933 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
 | pressao_mb | pressao_max_mb | 0.9917 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
-| umid_pct | umid_min_pct | 0.9827 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
+| umid_pct | umid_min_pct | 0.9832 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
 | temp_c | temp_max_c | 0.9825 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
-| umid_min_pct | orvalho_depressao | -0.9756 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
+| umid_min_pct | orvalho_depressao | -0.9758 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
 | temp_max_c | temp_min_c | 0.9672 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
-| temp_c | temp_min_c | 0.9645 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
-| umid_max_pct | umid_min_pct | 0.9595 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
-| umid_pct | umid_max_pct | 0.9565 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
+| temp_c | temp_min_c | 0.9644 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
+| umid_max_pct | umid_min_pct | 0.9602 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
+| umid_pct | umid_max_pct | 0.9566 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
 | chuva_3h | chuva_max_3h | 0.9542 | Variaveis de chuva excluidas do clustering (leakage de alvo); mantidas apenas na classificacao como memoria multi-horizonte <= t. |
-| umid_max_pct | orvalho_depressao | -0.9518 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
+| umid_max_pct | orvalho_depressao | -0.9513 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
 | temp_orvalho_c | orvalho_min_c | 0.9342 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
-| temp_orvalho_c | orvalho_max_c | 0.9200 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
+| temp_orvalho_c | orvalho_max_c | 0.9186 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
 | chuva_6h | chuva_max_6h | 0.9158 | Variaveis de chuva excluidas do clustering (leakage de alvo); mantidas apenas na classificacao como memoria multi-horizonte <= t. |
-| temp_delta_3h | umid_delta_3h | -0.9019 | Derivada excluida do clustering para manter espaco enxuto; mantida na classificacao (Random Forest tolera correlacao entre derivadas). |
-| temp_max_c | umid_min_pct | -0.8842 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
-| temp_max_c | orvalho_depressao | 0.8781 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
-| temp_c | orvalho_depressao | 0.8763 | Derivada excluida do clustering para manter espaco enxuto; mantida na classificacao (Random Forest tolera correlacao entre derivadas). |
+| temp_delta_3h | umid_delta_3h | -0.9017 | Derivada excluida do clustering para manter espaco enxuto; mantida na classificacao (Random Forest tolera correlacao entre derivadas). |
+| temp_max_c | umid_min_pct | -0.8839 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
+| temp_max_c | orvalho_depressao | 0.8782 | Extremos max/min excluidos de ambos os modelos; mantida leitura horaria principal e amplitude intra-horaria derivada (amp_*_1h). |
+| temp_c | orvalho_depressao | 0.8765 | Derivada excluida do clustering para manter espaco enxuto; mantida na classificacao (Random Forest tolera correlacao entre derivadas). |
 
 ### Resumo da separacao Clustering vs. Classificacao
 - **Clustering (K-Means, k=3, StandardScaler)**: utiliza apenas as **8 features** de estado atmosferico instantaneo e ciclos (`pressao_mb`, `temp_c`, `temp_orvalho_c`, `umid_pct`, `hora_sin`, `hora_cos`, `mes_sin`, `mes_cos`). Exclui toda variavel de chuva (evita viciar os grupos pelo alvo), exclui `orvalho_depressao` (quase perfeitamente correlacionada com `umid_pct`, evitando dupla contagem na distancia euclidiana) e exclui deltas/amplitudes redundantes.
@@ -77,9 +77,9 @@ Foram identificados **52 pares** com |r| >= 0,70 (registrados em `ml/outputs/red
 
 | cluster | horas | pressao_media | temp_media | orvalho_medio | umidade_media | pct_horas_chuva | chuva_acumulada_mm |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 0 | 11476 | 1012.1700 | 28.8970 | 21.1890 | 63.5560 | 2.3090 | 147.2000 |
-| 1 | 11409 | 1011.6500 | 25.2450 | 22.4650 | 84.9570 | 17.7230 | 4188.0000 |
-| 2 | 10486 | 1014.8130 | 23.4930 | 20.8290 | 85.4800 | 21.3520 | 3171.4000 |
+| 0 | 11552 | 1012.1920 | 28.8800 | 21.1830 | 63.5950 | 2.3200 | 148.4000 |
+| 1 | 11409 | 1011.6490 | 25.2520 | 22.4620 | 84.9130 | 17.6610 | 4180.0000 |
+| 2 | 10410 | 1014.8080 | 23.4630 | 20.8230 | 85.6630 | 21.5470 | 3178.2000 |
 
 ## 5. Governanca e Risco de Data Leakage
 
@@ -90,7 +90,7 @@ Foram identificados **52 pares** com |r| >= 0,70 (registrados em `ml/outputs/red
 
 ## 6. Datasets de Trabalho Atualizados
 
-- `dados/df_recife_features.csv`: [33371, 40] — identificadores separados (`datetime_utc`, `datetime_local`, `ano`), 33 features de entrada + `cluster`/`cluster_0..2`, **0 nulos** e **0 colunas de alvo/futuro/chuva bruta**.
+- `dados/df_recife_features.csv`: [33371, 36] — identificadores separados (`datetime_utc`, `datetime_local`, `ano`) e 33 features; rotulos de cluster ficam apenas no arquivo de clustering.
 - `dados/df_recife_cluster_features.csv`: [33371, 10] — `datetime`, 8 features de clustering (padrao `kmeans_recife.ipynb`) e `cluster`, sem chuva e sem alvos.
 - `dados/df_recife_alvos.csv`: [33371, 17] — identificadores + precipitacao limpa + agregados futuros e 8 colunas `alvo_*` isolados em arquivo proprio.
 
