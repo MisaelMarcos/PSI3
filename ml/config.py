@@ -13,9 +13,9 @@ DATA_DIR = REPO_ROOT / "dados" / "clima"
 _DEFAULT_CLIMA_CSV = DATA_DIR / "recife_inmet_2019_2020.csv"
 _RECIFE_DATETIME_CSV = REPO_ROOT / "dados" / "df_recife_datetime.csv"
 RAW_CSV = (
-    _DEFAULT_CLIMA_CSV
-    if _DEFAULT_CLIMA_CSV.exists()
-    else _RECIFE_DATETIME_CSV
+    _RECIFE_DATETIME_CSV
+    if _RECIFE_DATETIME_CSV.exists()
+    else _DEFAULT_CLIMA_CSV
 )
 OPEN_METEO_CSV = DATA_DIR / "open_meteo_recife_2019_2020.csv"
 LIVE_CSV = DATA_DIR / "observacoes_inmet_a301.csv"

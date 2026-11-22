@@ -228,40 +228,56 @@ def _rolling(serie: pd.Series, janela: int, funcao: str = "sum") -> pd.Series:
     return getattr(obj, funcao)()
 
 
+def _serie_horaria(df: pd.DataFrame, coluna: str) -> pd.Series:
+    return pd.Series(
+        df[coluna].to_numpy(), index=pd.DatetimeIndex(df["datetime_utc"])
+    ).asfreq("h")
+
+
+def _delta_horas(df: pd.DataFrame, coluna: str, horas: int) -> pd.Series:
+    index = pd.DatetimeIndex(df["datetime_utc"])
+    serie = _serie_horaria(df, coluna)
+    return (serie - serie.shift(horas)).reindex(index).fillna(0.0)
+
+
 def construir_features(df_bruto: pd.DataFrame) -> pd.DataFrame:
     """Adiciona features candidatas (<= t) e alvos futuros (> t) a base horaria."""
     df = df_bruto.copy()
     chuva = df["precip_mm_limpa"].astype(float)
+    index = pd.DatetimeIndex(df["datetime_utc"])
+    chuva_horaria = _serie_horaria(df, "precip_mm_limpa").fillna(0.0)
 
     # Memoria e acumulados de chuva observada ate o instante t
     df["chuva_1h"] = chuva
-    df["chuva_3h"] = _rolling(chuva, 3)
-    df["chuva_6h"] = _rolling(chuva, 6)
-    df["chuva_12h"] = _rolling(chuva, 12)
-    df["chuva_24h"] = _rolling(chuva, 24)
-    df["chuva_max_3h"] = _rolling(chuva, 3, "max")
-    df["chuva_max_6h"] = _rolling(chuva, 6, "max")
+    df["chuva_3h"] = _rolling(chuva_horaria, 3).reindex(index).to_numpy()
+    df["chuva_6h"] = _rolling(chuva_horaria, 6).reindex(index).to_numpy()
+    df["chuva_12h"] = _rolling(chuva_horaria, 12).reindex(index).to_numpy()
+    df["chuva_24h"] = _rolling(chuva_horaria, 24).reindex(index).to_numpy()
+    df["chuva_max_3h"] = _rolling(chuva_horaria, 3, "max").reindex(index).to_numpy()
+    df["chuva_max_6h"] = _rolling(chuva_horaria, 6, "max").reindex(index).to_numpy()
     for lag in (1, 3, 6, 12, 24):
-        df[f"chuva_lag_{lag}h"] = chuva.shift(lag).fillna(0.0)
+        df[f"chuva_lag_{lag}h"] = (
+            chuva_horaria.shift(lag).reindex(index).fillna(0.0).to_numpy()
+        )
 
     # Pressao e variacoes barometricas ate t
     pressao = df["pressao_mb"].astype(float)
-    df["pressao_delta_1h"] = pressao.diff(1).fillna(0.0)
-    df["pressao_delta_3h"] = pressao.diff(3).fillna(0.0)
-    df["pressao_delta_6h"] = pressao.diff(6).fillna(0.0)
+    df["pressao_delta_1h"] = _delta_horas(df, "pressao_mb", 1).to_numpy()
+    df["pressao_delta_3h"] = _delta_horas(df, "pressao_mb", 3).to_numpy()
+    df["pressao_delta_6h"] = _delta_horas(df, "pressao_mb", 6).to_numpy()
 
     # Temperatura, ponto de orvalho e derivadas termodinamicas ate t
     temp = df["temp_c"].astype(float)
     orvalho = df["temp_orvalho_c"].astype(float)
     df["orvalho_depressao"] = temp - orvalho
-    df["temp_delta_1h"] = temp.diff(1).fillna(0.0)
-    df["temp_delta_3h"] = temp.diff(3).fillna(0.0)
-    df["orvalho_delta_3h"] = orvalho.diff(3).fillna(0.0)
+    df["temp_delta_1h"] = _delta_horas(df, "temp_c", 1).to_numpy()
+    df["temp_delta_3h"] = _delta_horas(df, "temp_c", 3).to_numpy()
+    df["orvalho_delta_3h"] = _delta_horas(df, "temp_orvalho_c", 3).to_numpy()
 
     # Umidade e variacoes ate t
     umidade = df["umid_pct"].astype(float)
-    df["umid_delta_1h"] = umidade.diff(1).fillna(0.0)
-    df["umid_delta_3h"] = umidade.diff(3).fillna(0.0)
+    df["umid_delta_1h"] = _delta_horas(df, "umid_pct", 1).to_numpy()
+    df["umid_delta_3h"] = _delta_horas(df, "umid_pct", 3).to_numpy()
 
     # Amplitudes intra-horarias (consolidadas de clusterizacao_gmm.ipynb)
     if {"temp_max_c", "temp_min_c"}.issubset(df.columns):
@@ -299,29 +315,47 @@ def construir_features(df_bruto: pd.DataFrame) -> pd.DataFrame:
         for coluna in COLUNAS_OPEN_METEO:
             df[coluna] = (
                 pd.to_numeric(df[coluna], errors="coerce")
-                .interpolate(method="linear", limit_direction="both")
+                .ffill()
                 .fillna(0.0)
             )
         direcao = np.deg2rad(df["om_wind_dir"].astype(float))
         df["om_wind_dir_sin"] = np.sin(direcao)
         df["om_wind_dir_cos"] = np.cos(direcao)
-        df["om_rad_lag_1h"] = df["om_rad"].shift(1).fillna(0.0)
-        df["om_cloud_delta_3h"] = df["om_cloud"].diff(3).fillna(0.0)
-        df["om_rad_delta_3h"] = df["om_rad"].diff(3).fillna(0.0)
-        df["om_precip_3h"] = _rolling(df["om_precip"].astype(float), 3)
+        df["om_rad_lag_1h"] = (
+            _serie_horaria(df, "om_rad").shift(1).reindex(index).fillna(0.0).to_numpy()
+        )
+        df["om_cloud_delta_3h"] = _delta_horas(df, "om_cloud", 3).to_numpy()
+        df["om_rad_delta_3h"] = _delta_horas(df, "om_rad", 3).to_numpy()
+        om_precip_horaria = _serie_horaria(df, "om_precip").fillna(0.0)
+        df["om_precip_3h"] = _rolling(om_precip_horaria, 3).reindex(index).to_numpy()
 
-    # Alvos futuros: maior precipitacao horaria e acumulado entre t+1 e t+horizonte.
+    # Alvos exigem chuva observada em cada hora futura e dentro do mesmo ano.
+    chuva_observada_horaria = _serie_horaria(df, "precip_mm")
+    anos_horarios = _serie_horaria(df, "ano")
+    anos_observacao = pd.Series(df["ano"].to_numpy(), index=index)
     for horizonte in HORIZONTES:
         futuros = pd.concat(
-            [chuva.shift(-passo) for passo in range(1, horizonte + 1)],
+            [
+                chuva_observada_horaria.shift(-passo).reindex(index)
+                for passo in range(1, horizonte + 1)
+            ],
             axis=1,
         )
         futuros.columns = [f"futuro_{passo}h" for passo in range(1, horizonte + 1)]
-        # skipna=False garante NaN quando qualquer hora futura estiver ausente.
-        max_futuro = futuros.max(axis=1, skipna=False)
-        soma_futuro = futuros.sum(axis=1, skipna=False)
-        df[f"max_fut_{horizonte}h"] = max_futuro
-        df[f"acum_fut_{horizonte}h"] = soma_futuro
+        anos_futuros = pd.concat(
+            [
+                anos_horarios.shift(-passo).reindex(index)
+                for passo in range(1, horizonte + 1)
+            ],
+            axis=1,
+        )
+        janela_valida = futuros.notna().all(axis=1) & anos_futuros.eq(
+            anos_observacao, axis=0
+        ).all(axis=1)
+        max_futuro = futuros.max(axis=1, skipna=False).where(janela_valida)
+        soma_futuro = futuros.sum(axis=1, skipna=False).where(janela_valida)
+        df[f"max_fut_{horizonte}h"] = max_futuro.to_numpy()
+        df[f"acum_fut_{horizonte}h"] = soma_futuro.to_numpy()
         for limiar in LIMIARES_MM:
             coluna = f"alvo_{horizonte}h_{limiar}mm"
             df[coluna] = np.where(
@@ -407,6 +441,13 @@ def validar_sem_leakage(
         ]
         assert not colunas_chuva, (
             f"Vazamento de alvo no clustering: variaveis de chuva em X: {colunas_chuva}"
+        )
+    else:
+        colunas_cluster = [
+            c for c in colunas_entrada if c == "cluster" or c.startswith("cluster_")
+        ]
+        assert not colunas_cluster, (
+            f"Rotulos de clustering nao entram na classificacao: {colunas_cluster}"
         )
 
 

@@ -55,6 +55,27 @@ COLUNAS_ORIGINAIS_DATETIME = [
     "estacao",
 ]
 
+COLUNAS_ARQUIVO_DATETIME = [
+    "datetime",
+    "PRECIPITAÇÃO TOTAL, HORÁRIO (mm)",
+    "PRESSAO ATMOSFERICA AO NIVEL DA ESTACAO, HORARIA (mB)",
+    "PRESSÃO ATMOSFERICA MAX.NA HORA ANT. (AUT) (mB)",
+    "PRESSÃO ATMOSFERICA MIN. NA HORA ANT. (AUT) (mB)",
+    "TEMPERATURA DO AR - BULBO SECO, HORARIA (°C)",
+    "TEMPERATURA DO PONTO DE ORVALHO (°C)",
+    "TEMPERATURA MÁXIMA NA HORA ANT. (AUT) (°C)",
+    "TEMPERATURA MÍNIMA NA HORA ANT. (AUT) (°C)",
+    "TEMPERATURA ORVALHO MAX. NA HORA ANT. (AUT) (°C)",
+    "TEMPERATURA ORVALHO MIN. NA HORA ANT. (AUT) (°C)",
+    "UMIDADE REL. MAX. NA HORA ANT. (AUT) (%)",
+    "UMIDADE REL. MIN. NA HORA ANT. (AUT) (%)",
+    "UMIDADE RELATIVA DO AR, HORARIA (%)",
+    "VENTO, DIREÇÃO HORARIA (gr) (° (gr))",
+    "VENTO, RAJADA MAXIMA (m/s)",
+    "VENTO, VELOCIDADE HORARIA (m/s)",
+    "ESTACAO",
+]
+
 COLUNAS_NUMERICAS = [
     "precip_mm",
     "pressao_mb",
@@ -75,8 +96,7 @@ COLUNAS_NUMERICAS = [
 ]
 
 # Variaveis de vento nao entram nas features por terem muitos valores ausentes.
-# Os extremos horarios sao interpolados para permitir o calculo de amplitudes
-# intra-horarias sem NaNs.
+# Extremos ausentes mantem NaN no inicio; as amplitudes os convertem em zero.
 COLUNAS_INTERPOLADAS = [
     "pressao_mb",
     "pressao_max_mb",
@@ -141,9 +161,9 @@ def ler_csv(caminho: str | Path = RAW_CSV) -> pd.DataFrame:
 
     - Aceita os esquemas bruto do INMET e ``df_recife_datetime.csv``.
     - A coluna ``datetime`` ja vem em UTC nos dois esquemas.
-    - Valores fisicos sao interpolados apenas para features; a precipitacao
-      original e preservada em ``precip_mm`` e a versao usada nos calculos
-      fica em ``precip_mm_limpa`` (nulos viram 0).
+    - Valores fisicos ausentes sao preenchidos apenas com observacoes passadas;
+      a precipitacao original fica em ``precip_mm`` para validar alvos e sua
+      versao preenchida com zero, ``precip_mm_limpa``, alimenta os preditores.
     """
     caminho = Path(caminho)
     if not caminho.exists():
@@ -152,17 +172,19 @@ def ler_csv(caminho: str | Path = RAW_CSV) -> pd.DataFrame:
             "Confira RAW_CSV em ml/config.py."
         )
 
-    df = pd.read_csv(caminho, encoding="latin1", dtype=str)
+    try:
+        df = pd.read_csv(caminho, encoding="utf-8-sig", dtype=str)
+    except UnicodeDecodeError:
+        df = pd.read_csv(caminho, encoding="latin1", dtype=str)
     if len(df.columns) == len(COLUNAS_ORIGINAIS):
         df.columns = COLUNAS_ORIGINAIS
-    elif len(df.columns) == len(COLUNAS_ORIGINAIS_DATETIME):
-        df.columns = COLUNAS_ORIGINAIS_DATETIME
+    elif set(df.columns) == set(COLUNAS_ARQUIVO_DATETIME):
+        df = df.rename(columns=dict(zip(COLUNAS_ARQUIVO_DATETIME, COLUNAS_ORIGINAIS_DATETIME)))
     else:
         raise ValueError(
             "Esperava um CSV com "
-            f"{len(COLUNAS_ORIGINAIS)} (bruto) ou "
-            f"{len(COLUNAS_ORIGINAIS_DATETIME)} (datetime) colunas, "
-            f"recebi {len(df.columns)}."
+            f"{len(COLUNAS_ORIGINAIS)} colunas brutas ou o esquema consolidado "
+            f"com cabecalhos conhecidos; recebi {len(df.columns)} colunas."
         )
 
     df["datetime"] = pd.to_datetime(df["datetime"], errors="coerce", utc=True)
@@ -172,24 +194,19 @@ def ler_csv(caminho: str | Path = RAW_CSV) -> pd.DataFrame:
     for coluna in COLUNAS_NUMERICAS:
         df[coluna] = _converter_numero(df[coluna])
 
-    # Precipitacao: preserva o valor bruto para diagnosticos e usa 0 quando a
-    # leitura esta ausente. O alvo tambem usa a serie limpa; linhas sem futuro
-    # valido sao descartadas na construcao dos alvos.
+    # Preditores de chuva usam 0 para ausencias; os alvos consultam precip_mm bruto.
     df["precip_mm_limpa"] = df["precip_mm"].fillna(0.0)
 
-    # Sensores de pressao/temperatura/umidade tem poucos nulos (13 no total).
+    # Forward-fill usa apenas valores disponiveis ate o instante da observacao.
     for coluna in COLUNAS_INTERPOLADAS:
-        mediana = df[coluna].median()
-        df[coluna] = (
-            df[coluna]
-            .interpolate(method="linear", limit_direction="both")
-            .fillna(mediana)
-            .fillna(0.0)
-        )
+        df[coluna] = df[coluna].ffill()
+
+    # As features de estado exigem leituras atuais; nao imputar o inicio com dados futuros.
+    df = df.dropna(subset=["pressao_mb", "temp_c", "temp_orvalho_c", "umid_pct"])
 
     # Vento nao e usado no modelo, mas mantemos as colunas para auditoria.
     for coluna in ["vento_dir_gr", "vento_rajada_ms", "vento_vel_ms"]:
-        df[coluna] = df[coluna].fillna(df[coluna].median()).fillna(0.0)
+        df[coluna] = df[coluna].ffill().fillna(0.0)
 
     df["datetime_utc"] = df["datetime"]
     df["datetime_local"] = df["datetime"].dt.tz_convert(TIMEZONE)
@@ -221,13 +238,7 @@ def ler_open_meteo(caminho: str | Path = OPEN_METEO_CSV) -> pd.DataFrame:
         if coluna not in df.columns:
             df[coluna] = 0.0
         df[coluna] = pd.to_numeric(df[coluna], errors="coerce")
-        mediana = df[coluna].median()
-        df[coluna] = (
-            df[coluna]
-            .interpolate(method="linear", limit_direction="both")
-            .fillna(mediana)
-            .fillna(0.0)
-        )
+        df[coluna] = df[coluna].ffill().fillna(0.0)
     return df[["datetime_utc", *COLUNAS_OPEN_METEO]].reset_index(drop=True)
 
 
@@ -274,13 +285,7 @@ def ler_observacoes_csv(caminho: str | Path = LIVE_CSV) -> pd.DataFrame:
     for coluna in COLUNAS_INTERPOLADAS:
         if coluna not in df.columns:
             df[coluna] = 0.0
-        mediana = df[coluna].median()
-        df[coluna] = (
-            df[coluna]
-            .interpolate(method="linear", limit_direction="both")
-            .fillna(mediana)
-            .fillna(0.0)
-        )
+        df[coluna] = df[coluna].ffill().fillna(0.0)
 
     for coluna in ["vento_dir_gr", "vento_rajada_ms", "vento_vel_ms"]:
         if coluna not in df.columns:
@@ -292,7 +297,7 @@ def ler_observacoes_csv(caminho: str | Path = LIVE_CSV) -> pd.DataFrame:
     for coluna in COLUNAS_OPEN_METEO:
         if coluna not in df.columns:
             df[coluna] = 0.0
-        df[coluna] = df[coluna].fillna(df[coluna].median()).fillna(0.0)
+        df[coluna] = df[coluna].ffill().fillna(0.0)
 
     df["datetime_utc"] = df["datetime"]
     df["datetime_local"] = df["datetime"].dt.tz_convert(TIMEZONE)
