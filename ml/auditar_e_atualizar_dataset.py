@@ -169,7 +169,7 @@ def gerar_relatorio_markdown(
         "",
         "## 6. Datasets de Trabalho Atualizados",
         "",
-        f"- `{resumo_json['arquivos_gerados']['working_features_csv']}`: {resumo_json['shapes']['working_features']} — identificadores separados (`datetime_utc`, `datetime_local`, `ano`), 33 features de entrada + `cluster`/`cluster_0..2`, **0 nulos** e **0 colunas de alvo/futuro/chuva bruta**.",
+        f"- `{resumo_json['arquivos_gerados']['working_features_csv']}`: {resumo_json['shapes']['working_features']} — identificadores separados (`datetime_utc`, `datetime_local`, `ano`) e 33 features; rotulos de cluster ficam apenas no arquivo de clustering.",
         f"- `{resumo_json['arquivos_gerados']['cluster_features_csv']}`: {resumo_json['shapes']['cluster_features']} — `datetime`, 8 features de clustering (padrao `kmeans_recife.ipynb`) e `cluster`, sem chuva e sem alvos.",
         f"- `{resumo_json['arquivos_gerados']['targets_csv']}`: {resumo_json['shapes']['targets']} — identificadores + precipitacao limpa + agregados futuros e 8 colunas `alvo_*` isolados em arquivo proprio.",
         "",
@@ -187,10 +187,11 @@ def gerar_relatorio_markdown(
     return "\n".join(linhas)
 
 
-def main() -> int:
+def main(caminho=RAW_CSV) -> int:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    df = preparar_base(RAW_CSV, usar_open_meteo=False, filtrar_anos=False)
+    caminho = Path(caminho).resolve()
+    df = preparar_base(caminho, usar_open_meteo=False, filtrar_anos=False)
     audit = auditar_features(df)
     df_proc = audit["df_com_clusters"]
 
@@ -213,23 +214,18 @@ def main() -> int:
     assert set(COLUNAS_ALVO).isdisjoint(X_cls.columns)
     assert set(COLUNAS_AGREGADAS_FUTURAS).isdisjoint(X_cls.columns)
 
-    # 1) Dataset de trabalho para modelagem (identificadores + features + cluster, SEM alvos/futuros/chuva bruta)
-    colunas_cluster_onehot = ["cluster", "cluster_0", "cluster_1", "cluster_2"]
+    # 1) Dataset supervisionado: identificadores e features, sem rótulos ou alvos.
     df_working_features = pd.concat(
         [
             df_id_cls.reset_index(drop=True),
             X_cls.reset_index(drop=True),
-            df_proc[colunas_cluster_onehot].reset_index(drop=True),
         ],
         axis=1,
     )
     feature_cols_only = [
         c for c in df_working_features.columns if c not in df_id_cls.columns
     ]
-    validar_sem_leakage(
-        [c for c in feature_cols_only if c not in colunas_cluster_onehot],
-        modo="classificacao",
-    )
+    validar_sem_leakage(feature_cols_only, modo="classificacao")
     assert set(COLUNAS_ALVO).isdisjoint(df_working_features.columns)
     assert set(COLUNAS_AGREGADAS_FUTURAS).isdisjoint(df_working_features.columns)
     assert "precip_mm" not in df_working_features.columns
@@ -273,7 +269,7 @@ def main() -> int:
     repo_root = Path(__file__).resolve().parent.parent
     resumo_json = {
         "gerado_em": datetime.now(timezone.utc).isoformat(),
-        "csv_bruto": str(RAW_CSV.relative_to(repo_root)),
+        "csv_bruto": str(caminho.relative_to(repo_root)),
         "n_registros": int(len(df_proc)),
         "features_candidatas_count": len(FEATURES_CANDIDATAS),
         "features_candidatas": FEATURES_CANDIDATAS,
@@ -317,7 +313,7 @@ def main() -> int:
     print("=" * 78)
     print("AUDITORIA E ATUALIZACAO DO DATASET CONCLUIDAS COM SUCESSO")
     print("=" * 78)
-    print(f"CSV bruto intacto:          {RAW_CSV} ({len(df_proc)} linhas)")
+    print(f"CSV bruto intacto:          {caminho} ({len(df_proc)} linhas)")
     print(f"Dataset features (ML):      {WORKING_FEATURES_CSV} {df_working_features.shape}")
     print(f"Dataset clustering:         {CLUSTER_FEATURES_CSV} {df_cluster_out.shape}")
     print(f"Dataset alvos (separado):   {TARGETS_CSV} {df_targets.shape}")
