@@ -1,0 +1,34 @@
+feature,grupo,spearman_classe_treino,nulos_pct
+chuva_1h,Chuva observada ate t,0.437166,0.000000
+chuva_3h,Chuva observada ate t,0.465496,0.000000
+chuva_6h,Chuva observada ate t,0.439826,0.000000
+chuva_12h,Chuva observada ate t,0.390066,0.000000
+chuva_24h,Chuva observada ate t,0.376065,0.000000
+chuva_max_3h,Chuva observada ate t,0.461406,0.000000
+chuva_max_6h,Chuva observada ate t,0.432244,0.000000
+chuva_lag_1h,Chuva observada ate t,0.376805,0.000000
+chuva_lag_3h,Chuva observada ate t,0.301615,0.000000
+chuva_lag_6h,Chuva observada ate t,0.216105,0.000000
+chuva_lag_12h,Chuva observada ate t,0.143140,0.000000
+chuva_lag_24h,Chuva observada ate t,0.162698,0.000000
+pressao_mb,Estado atmosferico em t,0.147935,0.000000
+pressao_delta_1h,Tendencia / amplitude ate t,0.029768,0.000000
+pressao_delta_3h,Tendencia / amplitude ate t,0.032474,0.000000
+pressao_delta_6h,Tendencia / amplitude ate t,0.037802,0.000000
+amp_pressao_1h,Tendencia / amplitude ate t,0.001149,0.000000
+temp_c,Estado atmosferico em t,-0.304442,0.000000
+temp_orvalho_c,Estado atmosferico em t,0.197775,0.000000
+orvalho_depressao,Estado atmosferico em t,-0.397337,0.000000
+temp_delta_1h,Tendencia / amplitude ate t,0.005708,0.000000
+temp_delta_3h,Tendencia / amplitude ate t,-0.030045,0.000000
+orvalho_delta_3h,Tendencia / amplitude ate t,0.055196,0.000000
+amp_temp_1h,Tendencia / amplitude ate t,-0.199705,0.000000
+umid_pct,Estado atmosferico em t,0.399369,0.000000
+umid_delta_1h,Tendencia / amplitude ate t,0.014023,0.000000
+umid_delta_3h,Tendencia / amplitude ate t,0.052647,0.000000
+amp_umid_1h,Tendencia / amplitude ate t,-0.243336,0.000000
+hora_sin,Ciclo temporal / sazonalidade,0.058478,0.000000
+hora_cos,Ciclo temporal / sazonalidade,0.164524,0.000000
+mes_sin,Ciclo temporal / sazonalidade,0.078377,0.000000
+mes_cos,Ciclo temporal / sazonalidade,-0.234672,0.000000
+estacao_chuvosa,Ciclo temporal / sazonalidade,0.213581,0.000000

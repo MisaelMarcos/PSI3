@@ -1,0 +1,5 @@
+esquema,n_classes,limites_mm,menor_classe_registros,menor_classe_pct,menor_classe_no_teste,razao_desbalanceamento
+A — binario (>= 10 mm),2,"10,0",472,1.423359,141,69.256356
+"B — 3 classes (0,2 / 10)",3,"0,2 / 10,0",472,1.423359,141,52.555085
+"C — 4 classes (0,2 / 2,5 / 10)",4,"0,2 / 2,5 / 10,0",472,1.423359,141,52.555085
+"D — 5 classes (0,2 / 2,5 / 10 / 20)",5,"0,2 / 2,5 / 10,0 / 20,0",158,0.476463,54,157.000000

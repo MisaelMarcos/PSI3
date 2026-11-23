@@ -1,0 +1,76 @@
+{
+  "dataset": "dados/df_recife_datetime.csv",
+  "sha256_csv": "c60f196d55ac75e0e45d03284831d8c76442faba5806d09083da8656f4c8b4a1",
+  "registros_base": 33371,
+  "registros_validos": 33161,
+  "variavel_base": "acum_fut_3h",
+  "horizonte_h": 3,
+  "limites_mm": [
+    0.2,
+    2.5,
+    10.0
+  ],
+  "classes": {
+    "0": "Sem chuva",
+    "1": "Fraca",
+    "2": "Moderada",
+    "3": "Forte"
+  },
+  "particoes": {
+    "treino": [
+      2018,
+      2019
+    ],
+    "validacao": [
+      2020
+    ],
+    "teste": [
+      2021
+    ]
+  },
+  "fim_teste": "12/11/2021",
+  "menor_valor_nao_nulo": 0.2,
+  "p75_chuvosos": 2.8,
+  "p95_chuvosos": 10.4,
+  "features": [
+    "chuva_1h",
+    "chuva_3h",
+    "chuva_6h",
+    "chuva_12h",
+    "chuva_24h",
+    "chuva_max_3h",
+    "chuva_max_6h",
+    "chuva_lag_1h",
+    "chuva_lag_3h",
+    "chuva_lag_6h",
+    "chuva_lag_12h",
+    "chuva_lag_24h",
+    "pressao_mb",
+    "pressao_delta_1h",
+    "pressao_delta_3h",
+    "pressao_delta_6h",
+    "amp_pressao_1h",
+    "temp_c",
+    "temp_orvalho_c",
+    "orvalho_depressao",
+    "temp_delta_1h",
+    "temp_delta_3h",
+    "orvalho_delta_3h",
+    "amp_temp_1h",
+    "umid_pct",
+    "umid_delta_1h",
+    "umid_delta_3h",
+    "amp_umid_1h",
+    "hora_sin",
+    "hora_cos",
+    "mes_sin",
+    "mes_cos",
+    "estacao_chuvosa"
+  ],
+  "random_state": 42,
+  "python": "3.12.7",
+  "pandas": "3.1.1",
+  "numpy": "2.5.5",
+  "scikit_learn": "1.9.1",
+  "comando_reproducao": "python ml/experimento_target.py"
+}
