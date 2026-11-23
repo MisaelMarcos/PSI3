@@ -1,0 +1,51 @@
+{
+  "dataset": "dados/df_recife_datetime.csv",
+  "sha256_csv": "c5eb0aa028e8ff569159a5ee83455834cebc81f51e051a165784063a8d83a2b0",
+  "registros_preparados": 33371,
+  "registros": 33371,
+  "registros_descartados": 0,
+  "periodo_inicio": "2018-01-03",
+  "periodo_fim": "2021-11-12",
+  "features": [
+    "pressao_mb",
+    "temp_c",
+    "temp_orvalho_c",
+    "umid_pct",
+    "hora_sin",
+    "hora_cos",
+    "mes_sin",
+    "mes_cos"
+  ],
+  "pca_variancia_minima": 0.95,
+  "componentes_pca": 6,
+  "variancia_pca_pct": 97.61457996826833,
+  "amostra_silhueta": 4000,
+  "min_cluster_sizes": [
+    25,
+    50,
+    100,
+    200
+  ],
+  "min_samples": [
+    null,
+    5,
+    10,
+    25
+  ],
+  "configuracao_referencia_alta_cobertura": {
+    "min_cluster_size": 25,
+    "min_samples": 5
+  },
+  "configuracao_maior_silhueta": {
+    "min_cluster_size": 200,
+    "min_samples": null,
+    "silhouette": 0.5039573845077268,
+    "cobertura_pct": 8.923915974948308
+  },
+  "random_state": 42,
+  "python": "3.12.16",
+  "scikit_learn": "1.3.2",
+  "pandas": "2.3.3",
+  "numpy": "1.26.4",
+  "comando_reproducao": "venv/bin/python ml/experimento_hdbscan_recife.py"
+}
