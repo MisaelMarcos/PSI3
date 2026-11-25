@@ -1,0 +1,4 @@
+algoritmo,tipo,parametros,n_clusters,registros_ruido,ruido_pct,cobertura_pct,menor_cluster_pct,maior_cluster_pct,silhouette_nao_ruido,davies_bouldin_nao_ruido,calinski_harabasz_nao_ruido,prob_media_nao_ruido,alta_confianca_pct,ari_vs_dbscan_c6,nmi_vs_dbscan_c6
+"HDBSCAN (eom mcs=25, ms=5)",Hierarquico (densidade variavel),"eom mcs=25, ms=5",6,1850,5.543736,94.456264,7.425609,33.346319,0.008349,3.775423,2914.747763,0.962840,92.820659,0.696536,0.738404
+DBSCAN_C6_escolhida,Densidade fixa (eps global),"eps=0.66, min_samples=24",4,3356,10.056636,89.943364,7.197866,39.851967,0.022247,2.130830,3271.889613,,,1.000000,1.000000
+DBSCAN_C1_aprovada,Densidade fixa (eps global),"eps=0.62, min_samples=12",4,2096,6.280903,93.719097,7.428606,40.867819,0.018476,2.162825,3299.502776,,,0.919821,0.879594

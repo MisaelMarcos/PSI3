@@ -1,11 +1,7 @@
 {
-  "dataset": "dados/df_recife_datetime.csv",
-  "sha256_csv": "c5eb0aa028e8ff569159a5ee83455834cebc81f51e051a165784063a8d83a2b0",
-  "registros_preparados": 33371,
+  "csv_entrada": "dados\\df_recife_datetime.csv",
+  "sha256_csv": "c60f196d55ac75e0e45d03284831d8c76442faba5806d09083da8656f4c8b4a1",
   "registros": 33371,
-  "registros_descartados": 0,
-  "periodo_inicio": "2018-01-03",
-  "periodo_fim": "2021-11-12",
   "features": [
     "pressao_mb",
     "temp_c",
@@ -16,36 +12,36 @@
     "mes_sin",
     "mes_cos"
   ],
-  "pca_variancia_minima": 0.95,
-  "componentes_pca": 6,
-  "variancia_pca_pct": 97.61457996826833,
-  "amostra_silhueta": 4000,
-  "min_cluster_sizes": [
-    25,
-    50,
-    100,
-    200
-  ],
-  "min_samples": [
-    null,
-    5,
-    10,
-    25
-  ],
-  "configuracao_referencia_alta_cobertura": {
+  "pca_componentes": 6,
+  "pca_variancia_retida_pct": 97.61,
+  "config_escolhida": {
+    "nome": "eom mcs=25, ms=5",
     "min_cluster_size": 25,
-    "min_samples": 5
+    "min_samples": 5,
+    "method": "eom",
+    "n_clusters": 6,
+    "ruido_pct": 5.54,
+    "cobertura_pct": 94.46,
+    "silhouette_nao_ruido": 0.0083,
+    "davies_bouldin_nao_ruido": 3.7754,
+    "prob_media_nao_ruido": 0.9628,
+    "ari_subamostra_media": 0.9672,
+    "nmi_subamostra_media": 0.9496
   },
-  "configuracao_maior_silhueta": {
-    "min_cluster_size": 200,
-    "min_samples": null,
-    "silhouette": 0.5039573845077268,
-    "cobertura_pct": 8.923915974948308
+  "comparacao_dbscan_c6": {
+    "ari_global": 0.6965,
+    "ari_nao_ruido": 0.7524,
+    "nmi_global": 0.7384,
+    "pontos_ruido_dbscan_resgatados_hdbscan": 1793,
+    "pontos_agrupados_dbscan_ruido_hdbscan": 287,
+    "razao_densidade_hdbscan": 1.203,
+    "razao_densidade_dbscan": 1.079
   },
-  "random_state": 42,
-  "python": "3.12.16",
-  "scikit_learn": "1.3.2",
-  "pandas": "2.3.3",
-  "numpy": "1.26.4",
-  "comando_reproducao": "venv/bin/python ml/experimento_hdbscan_recife.py"
+  "versoes": {
+    "python": "3.13.7",
+    "scikit_learn": "1.9.1",
+    "pandas": "3.1.0",
+    "numpy": "2.5.4"
+  },
+  "comando_reproducao": "python ml/experimento_hdbscan_recife.py"
 }

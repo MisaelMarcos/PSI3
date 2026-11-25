@@ -1,0 +1,4 @@
+config,min_cluster_size,min_samples,method,n_clusters,ruido_pct,cobertura_pct,silhouette_nao_ruido,davies_bouldin_nao_ruido,prob_media_nao_ruido,ari_subamostra_media,ari_subamostra_dp,ari_nao_ruido_media,nmi_subamostra_media,k_subamostra_media,k_subamostra_dp,ruido_subamostra_media,ruido_subamostra_dp,score_hdbscan
+"eom mcs=25, ms=5",25,5,eom,6,5.543736,94.456264,0.008349,3.775423,0.962840,0.967160,0.001620,1.000000,0.949604,6.000000,0.000000,7.502997,0.120172,0.769100
+"eom mcs=25, ms=10",25,10,eom,6,14.944113,85.055887,0.013182,3.648215,0.955405,0.907912,0.003366,1.000000,0.903921,6.000000,0.000000,19.148936,0.133870,0.721752
+"eom mcs=25, ms=18",25,18,eom,6,29.441731,70.558269,0.026874,3.391798,0.950858,0.811517,0.005415,1.000000,0.846272,6.000000,0.000000,36.361253,0.258102,0.649006
