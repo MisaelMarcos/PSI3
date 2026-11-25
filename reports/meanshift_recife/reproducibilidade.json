@@ -1,0 +1,43 @@
+{
+  "dataset": "dados/df_recife_datetime.csv",
+  "sha256_csv": "c60f196d55ac75e0e45d03284831d8c76442faba5806d09083da8656f4c8b4a1",
+  "registros": 33371,
+  "periodo_inicio": "2018-01-03",
+  "periodo_fim": "2021-11-12",
+  "features": [
+    "pressao_mb",
+    "temp_c",
+    "temp_orvalho_c",
+    "umid_pct",
+    "hora_sin",
+    "hora_cos",
+    "mes_sin",
+    "mes_cos"
+  ],
+  "pca_variancia_minima": 0.95,
+  "componentes_pca": 6,
+  "variancia_pca_pct": 97.61457996826832,
+  "quantis": [
+    0.01,
+    0.02,
+    0.03,
+    0.05,
+    0.075,
+    0.1,
+    0.15,
+    0.2,
+    0.3
+  ],
+  "bandwidth_escolhido": 1.857031318515085,
+  "quantil_escolhido": 0.05,
+  "n_clusters": 6,
+  "min_bin_freq": 5,
+  "regra_escolha": "3<=k<=10, menor cluster >= 1.0%, maior Silhouette",
+  "tempo_grade_s": 97.10425259999465,
+  "random_state": 42,
+  "python": "3.12.7",
+  "scikit_learn": "1.9.1",
+  "pandas": "3.1.1",
+  "numpy": "2.5.5",
+  "comando_reproducao": "python ml/experimento_meanshift_recife.py"
+}

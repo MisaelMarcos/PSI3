@@ -1,0 +1,4 @@
+algoritmo,tipo,parametros,tempo_s,n_clusters,registros_ruido,ruido_pct,cobertura_pct,menor_cluster_pct,maior_cluster_pct,silhouette_nao_ruido,davies_bouldin_nao_ruido,calinski_harabasz_nao_ruido,chuva_pct_min_cluster,chuva_pct_max_cluster,ari_vs_meanshift,nmi_vs_meanshift
+Mean Shift,Densidade (busca de modas),"bandwidth=1,857 (quantil 0,050)",7.361793,6,0,0.000000,100.000000,10.982590,21.473735,0.214215,1.388468,8184.980349,1.364256,26.528049,1.000000,1.000000
+KMeans,Particional (centroides),"K=5, n_init=10",0.274351,5,0,0.000000,100.000000,16.679153,22.774265,0.217271,1.452663,8906.710867,2.278781,26.228825,0.629820,0.655081
+DBSCAN,Densidade fixa (eps global),"eps=0.66, min_samples=24",1.311963,4,3356,10.056636,89.943364,7.197866,39.851967,0.022247,2.130830,3271.889613,6.452956,23.835833,0.160673,0.240604
