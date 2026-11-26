@@ -1,0 +1,6 @@
+parametros,tempo_fit_s,f1_macro_validacao,recall_forte_validacao
+"{""max_depth"": 4}",0.065186,0.313175,0.519231
+"{""max_depth"": 6}",0.090079,0.330784,0.509615
+"{""max_depth"": 8}",0.117603,0.305567,0.509615
+"{""max_depth"": 12}",0.160633,0.329725,0.365385
+"{""max_depth"": null}",0.167857,0.325402,0.336538

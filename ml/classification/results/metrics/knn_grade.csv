@@ -1,0 +1,5 @@
+parametros,tempo_fit_s,f1_macro_validacao,recall_forte_validacao
+"{""clf__n_neighbors"": 5}",0.018123,0.350224,0.086538
+"{""clf__n_neighbors"": 15}",0.016737,0.323077,0.038462
+"{""clf__n_neighbors"": 31}",0.017248,0.308445,0.019231
+"{""clf__n_neighbors"": 51}",0.017867,0.290360,0.000000

@@ -1,0 +1,4 @@
+parametros,tempo_fit_s,f1_macro_validacao,recall_forte_validacao
+"{""clf__C"": 0.3}",14.769377,0.362161,0.326923
+"{""clf__C"": 1.0}",12.943704,0.357751,0.250000
+"{""clf__C"": 3.0}",13.980493,0.359079,0.173077
